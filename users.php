@@ -76,7 +76,7 @@ require '/handle.php';
   print "</thead>";
   print "<tbody>";
 
-
+  
 
 
   $users = mysqli_query($db, "SELECT * FROM `users`");
@@ -110,5 +110,9 @@ require '/handle.php';
   
     
    </form>
+
+
+
+   
 </body>
 </html>

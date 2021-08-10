@@ -3,33 +3,23 @@
 function search ($query)
 {
 
-  $query = trim($query); 
-  $query = mysql_real_escape_string($query);
-  $query = htmlspecialchars($query);
-  
-  if (!empty($query)) {
+  $query = $_POST['query'];
 
-    $data = "SELECT  `ФИО`, `e-mail` FROM table users
-    WHERE `ФИО` LIKE '%$query%' OR `e-mail` LIKE `%$query%`
-    ORDER BY `ФИО`";
-
-    $result = mysql_query($data);
-
-    if (mysql_affected_rows() >0 ) {
-      $row = mysql_fetch_assoc($result);
-      $num = mysql_num_rows($result);
-
-      $text = '<p>По запросу <b>'.$query.'</b> найдено совпадений: '.$num.'</p>';
-
-      }
-
-    else {
-    $text = '<p>По вашему запросу ничего не найдено.</p>';
-
-
-    
+  if (isset($_POST['id']) AND isset($_POST['ФИО']) AND isset($_POST['e-mail']) AND isset($_POST['birthday'])) {
+   $id = $_POST['id'];
+   $name = $_POST['ФИО'];
+   $email = $_POST['e-mail'];
+   $date = $_POST['birthday'];
   }
+
+  $usersData = array($id, $name, $email, $data);
+  $found = '';
+  foreach ($users as $query) {
+      if (stripos($string, $usersData) !== false) {
+          $found = $query;
+          break;
+      }
+  }
+  echo "This first match found was '$found'";
 }
-  return $text; 
-}
-?>
+  
