@@ -1,8 +1,7 @@
 <?php
 
-$users = require_once __DIR__.'/usersDb.php';
-require_once __DIR__.'/functions.php';
-
+include_once('functions.php');
+include_once('usersDb.php');
 
 ?>
 
@@ -25,14 +24,10 @@ foreach($users as $user){
     ||strripos("$user->surname" , $query) !== false
     ||strripos("$user->email" , $query)   !== false){
 
-uniSort($key);
+uniSort($key);}}
+}
 
-}
-}
-}
 usort($users, uniSort("birthday"));
-
-
 
 if (isset($_GET['id'])){
     usort($users, function($user1, $user2){
@@ -54,6 +49,8 @@ if (isset($_GET['id'])){
         return strcmp($user1->email, $user2->email);
     });
 }
+
+    
 
     if(isset($_POST['user_type']) && isset($_POST['user_name']) && isset($_POST['user_surname'])
     && isset($_POST['e-mail']) && isset($_POST['password']) && isset($_POST['birthday'])){
@@ -79,11 +76,8 @@ if (isset($_GET['id'])){
 
     $users[] = $addUser;}
 
-    
-
     ?>
 
- 
 <form name="search" method="get" action="/users.php">
     <input type="search" name="query" value="<?= isset($_GET['query']) ? $_GET['query'] : "" ?>" placeholder="Введите имя или e-mail">
     <button type="submit">Найти</button> 
@@ -97,25 +91,24 @@ if (isset($_GET['id'])){
 <th><a href="/users.php?surname">surname</th>
 <th>bitrhday</th>
 <th><a href="/users.php?email">E-mail</th>
-
-
 <th><a href="">Операции</a></th>
+<th><a href="/users-cards.php">Карточки</a></th>
 </tr>
-
 
 <?php
 foreach ($users as $user):?>
+
 <tr>
     <form action="/users.php?ids" method="post">
     <th >
-    <input type="checkbox"  name="user" value="1">
-    <input type="hidden" name="user" value="0"> 
+    <input type="checkbox"  name="users[user]" value="1">
+    <input type="hidden" name="users[user]" value="0"> 
     </th></a>
     </form>
     <th><?php echo $user->id ?></th>
     <th><?php 
     echo $user->name;?></th>
-<th><?php echo $user->surname?></th>
+    <th><?php echo $user->surname?></th>
     <th><?php echo $user->birthday?></th>
     <th><?php echo $user->email?></th>
     <th><a href="/users.php?id=<?php echo $user->id?>">Редактировать</a>
@@ -124,23 +117,15 @@ foreach ($users as $user):?>
     </th>
     
     </tr>
-<?php endforeach;
-
-    if(isset($_POST['test'])){
-        if(in_array('users', $_POST['user'])){
-            echo "Option1 was checked!";
-        }
-    }
-
-    
+    <?php endforeach;
 
     if (isset($_GET['idd'])){
     $userId = intval($_GET['idd']);
     foreach($users as $user){if($userId == $user->id){
 
-        var_dump($users);
+        // var_dump($users);
 
-        var_dump($user);
+        // var_dump($user);
 
         $userAr = (array) $user;
 
@@ -148,21 +133,16 @@ foreach ($users as $user):?>
 
         unset($userAr);
 
-
-
         array_splice($users, 0);
 
+        // foreach ($userAr as $key => $id) {
+        //     if ($id == $userId) {
+        //         unset($userAr[$id]);
+        //     }
 
-
-        foreach ($userAr as $key => $id) {
-            if ($id == $userId) {
-                unset($userAr[$id]);
-            }
-
-        }
+        // }
 
         // var_dump($user);
-
 
         //  foreach($element as $valueKey => $value) {
         //         if($valueKey == 'id' && $value == 'searched value')
@@ -176,8 +156,7 @@ foreach ($users as $user):?>
         // unset($users[$user]);
 
         
-
-        // var_dump($user);
+// var_dump($user);
         
         // unset($user);
 
@@ -199,10 +178,6 @@ foreach ($users as $user):?>
         // $unset($users[(array)$user]);
     }}}
 
-
-    
-
-
     if (isset($_GET['id'])){
     $userId = intval($_GET['id']);
     foreach($users as $user){if($userId == $user->id){
@@ -216,13 +191,9 @@ foreach ($users as $user):?>
     
     var_dump($user);
 
-    array_splice($users, $user->id);
+    unset($user);
 
-
-        
-    }}
-
-    
+    array_splice($users, 0);}}
     ?>
 
 </table>
@@ -260,33 +231,53 @@ else{
 }
 
 
+
+
 if(isset($_GET['edit'])){
 
     echo $userId;
 
     foreach($users as $user){
         if($userId == $user->id ){
-            var_dump($userEdit);
+            var_dump($user);
         }
 }
     
 }
 
-if (isset($_REQUEST[$_user])){
 
-$user =  $_REQUEST[$_user];
 
-if($user == 0){
 
-echo 'user';}
+if ( 1 == $users['user'] ) echo 'checked="checked"';
 
+function checked( $checked, $current = true, $echo = true ) {
+    return __checked_selected_helper( $checked, $current, $echo, 'checked' );
 }
+
+
+
+
+
+// if (isset($_REQUEST[$_user])){
+
+// $user =  $_REQUEST[$_user];
+
+// if($user == 0){
+
+// echo 'user';}
+
+// }
 
 // В итоге, вызов получается очень простым:
 
 
+// $res = 'success';
+// if(isset($_GET['user'])){
+//     if($_GET['user'] !== false)
+//     {
+//         echo 'success';
+//     }}
 
-// if(isset($_GET['user'] == "on")){
-//     echo "чекбокс выбран";
-// }
+// //     echo "чекбокс выбран";
+// // }
 
