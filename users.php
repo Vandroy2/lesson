@@ -3,20 +3,21 @@
 include_once('functions.php');
 include_once('usersDb.php');
 
+// ========================Удаление принятых пользователей==========================================
 
+if(isset($_GET['user'])){
+  
+    $userId = $_GET['user'];
+    foreach($userId as $key=> $value){
+    foreach($users as $user){if($user->id==$value){
 
-?>
+    unset($users[$user]);
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
-</head>
-<body>
+    $delUsers[] = $user;
 
-<?php
+    $users = $delUsers;
+    
+  }};}}
 
 // ==========Сортировака по "birthday" ===============================
 
@@ -91,55 +92,9 @@ if (isset($_GET['id'])){
 
     $users[] = $addUser;}
 
-    ?>
-
-<!-- =======================Таблица пользователей======================= -->
 
 
-<form name="search" method="get" action="/users.php">
-    <input type="search" name="query" value="<?= isset($_GET['query']) ? $_GET['query'] : "" ?>" placeholder="Введите имя или e-mail">
-    <button type="submit">Найти</button> 
-</form>
-
-
-<form action="/users-cards.php" method="get">
-<input type="submit" value = 'Посмотреть карточки' >
-
-<table border="1">
-<tr>
-<th><a href="/users.php">Select</th>
-<th><a href="/users.php?id">id</th>
-<th><a href="/users.php?name">name</th>
-<th><a href="/users.php?surname">surname</th>
-<th>bitrhday</th>
-<th><a href="/users.php?email">E-mail</th>
-<th><a href="">Операции</a></th>
-<th><a href="/users-cards.php">Карточки</a></th>
-</tr>
-
-<!--  -->
-
-<?php
-foreach ($users as $user):?>
-<tr>
-    <th ><input type="checkbox"  name="user[]" value="<?php echo $user->id ?>"></th>
-    <th><?php echo $user->id ?></th>
-    <th><?php if(getAuthUser($users)){echo $user->name. '(это вы)';}
-    else echo $user->name;?></th>
-    <th><?php echo $user->surname?></th>
-    <th><?php echo $user->birthday?></th>
-    <th><?php echo $user->email?></th>
-    <th><a href="/users.php?ide=<?php echo $user->id?>">Редактировать</a>
-    </th>
-    <th><a href="/users.php?idd=<?php echo $user->id?>">Удалить</a>
-    </th>
-    
-    </tr>
-    <?php endforeach;?>
-    <?php
-
-
-    // ====================Удаление пользователей=========================
+// ====================Удаление пользователей=========================
 
 
     if (isset($_GET['idd'])){
@@ -187,6 +142,61 @@ foreach ($users as $user):?>
     //  print_r($users);
 }}
 
+// =======================Начало страницы=============================
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+</head>
+<body>
+
+<!-- =======================Таблица пользователей======================= -->
+
+
+<form name="search" method="get" action="/users.php">
+    <input type="search" name="query" value="<?= isset($_GET['query']) ? $_GET['query'] : "" ?>" placeholder="Введите имя или e-mail">
+    <button type="submit">Найти</button> 
+</form>
+
+
+<form action="/users-cards.php" method="get">
+<input type="submit" value = 'Посмотреть карточки' >
+
+<table border="1">
+<tr>
+<th><a href="/users.php">Select</th>
+<th><a href="/users.php?id">id</th>
+<th><a href="/users.php?name">name</th>
+<th><a href="/users.php?surname">surname</th>
+<th>bitrhday</th>
+<th><a href="/users.php?email">E-mail</th>
+<th><a href="">Операции</a></th>
+<th><a href="/users-cards.php">Карточки</a></th>
+</tr>
+
+<?php
+foreach ($users as $user):?>
+<tr>
+    <th ><input type="checkbox"  name="user[]" value="<?php echo $user->id ?>"></th>
+    <th><?php echo $user->id ?></th>
+    <th><?php if(getAuthUser($users)){echo $user->name. '(это вы)';}
+    else echo $user->name;?></th>
+    <th><?php echo $user->surname?></th>
+    <th><?php echo $user->birthday?></th>
+    <th><?php echo $user->email?></th>
+    <th><a href="/users.php?ide=<?php echo $user->id?>">Редактировать</a>
+    </th>
+    <th><a href="/users.php?idd=<?php echo $user->id?>">Удалить</a>
+    </th>
+    
+    </tr>
+    <?php endforeach;?>
+    <?php
 
     // ===============Кнопка редактировать в таблице====================
 
@@ -208,7 +218,6 @@ foreach ($users as $user):?>
 </table>
 </form>
 
-
 <form action="/users.php?edit" method="post">
 <input type="text" placeholder = 'input type' name = 'user_type' 
 value = "<?php echo $userType?>" ><br>
@@ -226,20 +235,6 @@ value = "<?php echo $userBirthday?>"><br>
 </form>
 <?php
 }
-/* else{
-
-    ?>
-    <form action="/users.php" method="post">
-    <input type="text" placeholder = 'input type' name = 'user_type' value = ><br>
-    <input type="text" placeholder = 'input your name' name = 'user_name'><br>
-    <input type="text" placeholder = 'input your surname' name = 'user_surname'><br>
-    <input type="text" placeholder = 'input your e-mail' name = 'e-mail'><br>
-    <input type="text" placeholder = 'input your password' name = 'password'><br>
-    <input type="text" placeholder = 'input your bitrhday' name = 'birthday'><br>
-    <input type="submit" value = 'создать'><br>
-    </form>
-    <?php
-} */
 
 
 // ========================Редактирование пользователей===================
@@ -247,43 +242,8 @@ value = "<?php echo $userBirthday?>"><br>
 
 if(isset($_GET['edit'])){
 
-     
-
     echo "Редактирование инициализировано";
 
     #unset($users[$user]);
-    
-
-    // var_dump($user);
-
-//     foreach($users as $user){
-//         if($userId == $user->id ){
-
-//             var_dump($users);
-//             var_dump($user);
-//         }
-// }
-    
-}
-
-
-// ========================Удаление принятых пользователей==========================================
-
-if(isset($_GET['user'])){
-  
-    $userId = $_GET['user'];
-    foreach($userId as $key=> $value){
-    foreach($users as $user){if($user->id==$value){
-
-    unset($users[$user]);
-
-    $delUsers[] = $user;
-
-    $users = $delUsers;
-    
-  }};}}
-
-
-
-
+    }
 
