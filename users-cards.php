@@ -1,7 +1,66 @@
 <?php
 
 include_once('functions.php');
+
 include_once('usersDb.php');
+
+if(isset($_GET['user'])){
+  
+    $userId = $_GET['user'];
+    foreach($userId as $key=> $value){
+    foreach($users as $user){if($user->id==$value){
+
+    $cardsUsers[] = $user;
+    
+  }};}}
+  else {echo 'выберите пользователей';?>
+    <h3><a href="/users.php">Cписок пользователей</a></h3><?php
+    exit();
+  }
+  
+// var_dump($cardsUsers);
+
+
+//=====================Подсчет суммы возрастов===========================
+
+$sum = 0;
+foreach ($cardsUsers as $user){
+  $age = calculate_age($user->birthday);
+  $sum += $age;
+  }
+
+  // ========================Подсчет определенного типа пользователя====================================
+
+$adminArray = [];
+foreach($cardsUsers as $user){
+    if($user->user_type == 'admin'){
+      $adminArray[] = $user; 
+    }
+  }
+
+$adminCount = count($adminArray);
+
+// echo $adminCount . "<br>";
+
+$userArray = [];
+foreach($cardsUsers as $user){
+    if($user->user_type == 'user'){
+      $userArray[] = $user; 
+    }
+  }
+
+$userCount = count($userArray);
+
+// echo $userCount . "<br>";
+
+$moderArray = [];
+foreach($cardsUsers as $user){
+    if($user->user_type == 'moderator'){
+      $moderArray[] = $user; 
+    }
+  }
+
+$moderCount = count($moderArray);
 
 ?>
 
@@ -13,7 +72,7 @@ include_once('usersDb.php');
   <title>Document</title>
 </head>
 <body>
-<?php foreach ($users as $user):?>
+<?php foreach ($cardsUsers as $user):?>
 <div class="card" style="border:solid">
   <h3>ID:<?php echo $user->id?></h3>
   <h3>Тип:<?php echo $user->user_type?></h3>
@@ -25,7 +84,7 @@ include_once('usersDb.php');
 <?php endforeach;?>
   </div>
   <div class="statistic" style="border:solid">
-  <div>User count:<?php $userCountAll = count($users); echo $userCountAll;?></div>
+  <div>User count:<?php $userCountAll = count($cardsUsers); echo $userCountAll;?></div>
    <div>Year count:<?php echo $sum?></div>
   <div class = "user_count_type">
   <h5>admin:<?php echo $adminCount ?></h5>
@@ -35,8 +94,21 @@ include_once('usersDb.php');
 
   </div>
 
-  <h3><a href="/users.php">Cписок пользователей</a></h3>
+    <form action="/users.php" method="GET">
+    <?php foreach ($cardsUsers as $user):?>
+    <th ><input type="hidden"  name="user[]" value="<?php echo $user->id ;?>"></th>
+<?php endforeach; ?>
+  </form>
+  <a href="/users.php">Cписок пользователей</a>
+
+  <!-- <h3><a href="/users.php">Cписок пользователей</a></h3> -->
+
+
 
   
 </body>
 </html>
+
+ 
+
+
