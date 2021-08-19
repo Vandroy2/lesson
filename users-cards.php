@@ -98,8 +98,9 @@ $moderCount = count($moderArray);
     <?php foreach ($cardsUsers as $user):?>
     <th ><input type="hidden"  name="user[]" value="<?php echo $user->id ;?>"></th>
 <?php endforeach; ?>
+<input type="submit" value = 'Cписок пользователей'>
   </form>
-  <a href="/users.php">Cписок пользователей</a>
+  <!-- <a href="/users.php">Cписок пользователей</a> -->
 
   <!-- <h3><a href="/users.php">Cписок пользователей</a></h3> -->
 
